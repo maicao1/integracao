@@ -20,7 +20,22 @@ bd_config = {
 # Criação de rota para o arquivo HTML principal
 
 @app.route('/cadastrar', methods=['POST'])
+
+
+
+
+def indexRota():
+    return render_template('index.html')
+# Biblioteca mysql.connector conecta o Python com o MySQL
+
+
+
+@app.route('/cadastrar', methods=['POST'])
 def criar_cadastro():
+
+ try:
+
+
 
     cpf = request.form['cpf']
     primeiro_nome = request.form['primeiro_nome']
@@ -28,19 +43,19 @@ def criar_cadastro():
     idade = request.form['idade']
 
 
-  conexao = mysql.connector.connect(**bd_config)
+    conexao = mysql.connector.connect(**bd_config)
 
-  curso = conexao.cursor()
+    curso = conexao.cursor()
 
-  query = "INSERT INTO cliente1(CPF,PRIMEIRO_NOME,SOBRENOME,IDADE)VALUES(%S,%S,%S)"
+    query = "INSERT INTO cliente1(CPF,PRIMEIRO_NOME,SOBRENOME,IDADE)VALUES(%s,%s,%s,%s)"
+    curso.execute(query(cpf,primeiro_nome,sobrenome,idade))
+        
+    curso.commit()
+    curso.close()
+    curso.close()
 
 
+ except mysql.connector.error as err:
+   return f"erro de conexao com o banco de dados"
 
 
-
-def indexRota():
-    return render_template('index.html')
-
-@app.route('/cadastrar', methods=['POST'])
-# Biblioteca mysql.connector conecta o Python com o MySQL
-# decorador tem @
